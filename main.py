@@ -52,6 +52,7 @@ def sync_from_trakt_to_notion():
             insert_item(database_id,
                         name=movie["title"],
                         tags=tags,
+                        type="电影",  # 添加这一行
                         trakt_id=detail["ids"]["trakt"],
                         imdb_id=detail["ids"]["imdb"] if "imdb" in detail["ids"] else "",
                         tmdb_id=detail["ids"]["tmdb"],
