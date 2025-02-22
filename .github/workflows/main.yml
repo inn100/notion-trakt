@@ -2,9 +2,9 @@ name: Build Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/tv-shows ]  # 添加新分支
   pull_request:
-    branches: [ main ]
+    branches: [ main, feature/tv-shows ]  # 添加新分支
   workflow_dispatch:
 
 jobs:
