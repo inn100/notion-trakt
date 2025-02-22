@@ -26,7 +26,7 @@ jobs:
           docker save notion-trakt:amd64 > notion-trakt-amd64.tar
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: notion-trakt-docker-image
           path: notion-trakt-amd64.tar
