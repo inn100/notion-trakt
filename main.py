@@ -69,7 +69,36 @@ def sync_from_trakt_to_notion():
                         )
 
 
+def sync_shows_from_trakt_to_notion():
+    shows = trakt.get_watched_shows()
+    for show in shows:
+        detail = show["show"]
+        try:
+            tv_detail = tmdb.get_tv_detail(int(detail["ids"]["tmdb"]))
+            
+            # 准备电视剧数据
+            properties = {
+                "名称": {"title": [{"text": {"content": detail["title"]}}]},
+                "TMDB ID": {"number": int(detail["ids"]["tmdb"])},
+                "Trakt ID": {"number": int(detail["ids"]["trakt"])},
+                "类型": {"select": {"name": "电视剧"}},
+                "海报": {"files": [{"name": f"https://image.tmdb.org/t/p/w500{tv_detail['poster_path']}"}]},
+                "观看时间": {"date": {"start": datetime.now().strftime("%Y-%m-%d")}}
+            }
+            
+            # 更新或创建条目
+            notion.create_or_update_page(properties)
+            
+        except Exception as e:
+            print(f"Error processing show {detail['title']}: {str(e)}")
+
+def main():
+    sync_from_trakt_to_notion()  # 同步电影
+    sync_shows_from_trakt_to_notion()  # 同步电视剧
+
 if __name__ == "__main__":
+    main()
     while True:
         sync_from_trakt_to_notion()
         sleep(60)
+
