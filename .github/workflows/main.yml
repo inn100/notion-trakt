@@ -2,9 +2,9 @@ name: Build Docker Image
 
 on:
   push:
-    branches: [ main, feature/tv-shows ]  # 添加新分支
+    branches: [ main, feature/tv-shows ]
   pull_request:
-    branches: [ main, feature/tv-shows ]  # 添加新分支
+    branches: [ main, feature/tv-shows ]
   workflow_dispatch:
 
 jobs:
@@ -22,11 +22,17 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build --platform linux/amd64 -t notion-trakt:amd64 .
-          docker save notion-trakt:amd64 > notion-trakt-amd64.tar
+          # 根据分支名称设置不同的标签
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            TAG="main"
+          else
+            TAG="tv-shows"
+          fi
+          docker build --platform linux/amd64 -t notion-trakt:$TAG .
+          docker save notion-trakt:$TAG > notion-trakt-$TAG.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: notion-trakt-docker-image
-          path: notion-trakt-amd64.tar
+          name: notion-trakt-${{ github.ref_name }}-image
+          path: notion-trakt-*.tar
