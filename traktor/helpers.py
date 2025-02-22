@@ -50,5 +50,13 @@ def get_watched_history():
         yield item
 
 
+def get_watched_shows_history():
+    # Retrieve all TV shows history records
+    for item in Trakt["sync/history"].shows(
+        pagination=True, per_page=25, extended="full"
+    ):
+        yield item
+
+
 def query_item(trakt_id: int):
     return Trakt["search"].lookup(trakt_id, "trakt", extended="full")[0]
