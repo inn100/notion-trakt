@@ -52,7 +52,7 @@ def sync_from_trakt_to_notion():
             insert_item(database_id,
                         name=movie["title"],
                         tags=tags,
-                        type="电影",  # 添加这一行
+                        type="电影",
                         trakt_id=detail["ids"]["trakt"],
                         imdb_id=detail["ids"]["imdb"] if "imdb" in detail["ids"] else "",
                         tmdb_id=detail["ids"]["tmdb"],
@@ -67,6 +67,7 @@ def sync_from_trakt_to_notion():
                         english_name=detail["title"],
                         production_companies=production_companies,
                         poster_url="https://image.tmdb.org/t/p/w500" + cover,
+                        海报={"files": [{"name": f"https://image.tmdb.org/t/p/w500{cover}"}]},  # 添加海报字段
                         )
 
 
@@ -102,4 +103,3 @@ if __name__ == "__main__":
     while True:
         sync_from_trakt_to_notion()
         sleep(60)
-
